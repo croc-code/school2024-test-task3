@@ -16,7 +16,34 @@
 4. Найденные в соответствии с условием задачи домены должны выводиться в нижнем регистре без указания протокола и «www» в алфавитном порядке.
 
 ## Автор решения
+Шверло Игорь Сергеевич, студент 2 курса Санкт-Петербургского государственного университета Телекоммуникаций им. профессора М. А. Бонч-Бруевича
 
+Направление обучения: программная инженерия
 ## Описание реализации
 
+#### [App](src/main/java/ru/wwerlosh/App.java) (Main):
+- Метод _**main(String[] args)**_: Принимает путь к HTML-файлу в качестве аргумента командной строки, создает экземпляры `DomainExtractor`, `JsonConverter` и `DomainProcessor`, и выводит результат обработки на консоль.
+
+#### [DomainExtractor](src/main/java/ru/wwerlosh/crawler/DomainExtractor.java) (Interface):
+- Метод **_extractDomains(File doc)_**: Извлекает домены из файла.
+
+#### [HtmlDomainExtractor](src/main/java/ru/wwerlosh/crawler/HtmlDomainExtractor.java) (Class):
+- Метод **_extractDomains(File doc)_**: Извлекает домены из HTML-файла.
+
+#### [JsonConverter](src/main/java/ru/wwerlosh/converter/JsonConverter.java) (Interface):
+- Метод **_convert(Collection<T> objects)_**: Преобразует коллекцию объектов в строковое представление в формате JSON.
+
+#### [DomainJsonConverter](src/main/java/ru/wwerlosh/converter/DomainJsonConverter.java) (Class):
+- Метод **_convert(Collection<T> objects)_**: Преобразует коллекцию доменов в строковое представление в формате JSON. Домены сортируются по алфавиту без учета регистра.
+
+#### [DomainProcessor](src/main/java/ru/wwerlosh/service/DomainProcessor.java) (Interface):
+- Метод **_process(File doc)_**: Обрабатывает домены в файле и возвращает результат обработки в виде JSON строки.
+
+#### [HtmlDomainProcessor](src/main/java/ru/wwerlosh/service/HtmlDomainProcessor.java) (Class):
+- Метод **_process(File doc)_**: Обрабатывает домены в файле с использованием `DomainExtractor` и `JsonConverter`, и возвращает результат в формате JSON.
 ## Инструкция по сборке и запуску решения
+
+### Build
+```mvn clean compile assembly:single```
+### Launch
+```java -jar .\target\demo-jar-with-dependencies.jar <путь-к-HTML-файлу>```
