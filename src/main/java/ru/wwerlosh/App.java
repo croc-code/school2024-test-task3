@@ -9,9 +9,14 @@ import ru.wwerlosh.service.DomainProcessor;
 import ru.wwerlosh.service.HtmlDomainProcessor;
 
 public class App {
+    /**
+     * Метод для запуска приложения.
+     *
+     * @param args Аргументы командной строки. Ожидается путь к файлу HTML-страницы.
+     */
     public static void main( String[] args ) {
         if (args.length != 1) {
-            System.out.println("Usage: java App <path_to_page_html>");
+            System.out.println("Usage: java App <path_to_html_page>");
             return;
         }
 
