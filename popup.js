@@ -1,22 +1,27 @@
 document.addEventListener("DOMContentLoaded", function() {
   let button = document.getElementById('ScanButton');
   button.addEventListener("click", function() {
-    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-      let activeTab = tabs[0];
-      let tabURL = activeTab.url;
-      findLinks(tabURL);
-    });
+    findLinks();
   });
 });
 
-function findLinks(pageURL) {
-  fetch(pageURL)
-    .then(response => response.text())
-    .then(html => {
-      const links = findLinksUsingRegex(html);
+function findLinks() {
+  chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+    const activeTab = tabs[0];
+    chrome.scripting.executeScript({
+      target: { tabId: activeTab.id },
+      function: () => document.documentElement.outerHTML
+    }, result => {
+      if (!result || result.length === 0 || !result[0].result) {
+        displayContent("Script execution failed or returned no result");
+        return;
+      }
+
+      const pageHTML = result[0].result;
+      const links = findLinksUsingRegex(pageHTML);
       displayLinks(links);
-    })
-    .catch(error => displayContent('Error while fetching HTML: ' + error));
+    });
+  });
 }
 
 function findLinksUsingRegex(pageHTML) {
@@ -48,16 +53,6 @@ function displayLinks(links) {
   return jsonString;
 }
 
-// function displayContent(content){
-//   let existingPre = document.querySelector('pre');
-//   if (existingPre) {
-//     existingPre.textContent = content;
-//   } else {
-//     let newPre = document.createElement('pre');
-//     newPre.textContent = content;
-//     document.body.appendChild(newPre);
-//   }
-// }
 function displayContent(content) {
   let newPre = document.createElement('pre');
   newPre.textContent = content;
