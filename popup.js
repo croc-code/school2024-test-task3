@@ -36,10 +36,11 @@ function findLinksUsingRegex(pageHTML) {
     links.push(hrefValue);
   });
   /*
-  в links происходит поиск по наличию протокола, ибо иначе, даже если ловить и исключать #,/,mailto:,
-  могут подтягиваться имена файлов, ибо те похожи на названия сторонних сайтов
+  в links происходит поиск по //
+  мы смотрим есть ли в начале строки http://, https:// или //
+  если есть, то ссылку принимаем
    */
-    const linkPattern = /^https?:\/\//i;
+  const linkPattern = /^(https?:)?\/\//i;
   return links.filter(function (link) {
     return link.match(linkPattern);
   });
@@ -49,7 +50,11 @@ function findLinksUsingRegex(pageHTML) {
 function displayLinks(links) {
   let cleanedLinks = links.map(link => {
     //Удаление протокола, www и приведение текста к нижнему регистру
-    return link.replace(/^(https?:\/\/)?(www\.)?([^\/]+).*$/i, '$3').toLowerCase();
+     let cleanedLink = link.replace(/^(https?:\/\/)?(www\.)?([^\/]+).*$/i, '$3').toLowerCase();
+     if (cleanedLink.startsWith('//')) {
+       cleanedLink = cleanedLink.slice(2);
+    }
+     return cleanedLink;
   });
   //удаление копий и сортировка по алфавиту
   let uniqueSortedLinks = [...new Set(cleanedLinks)].sort();
