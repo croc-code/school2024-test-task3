@@ -1,13 +1,14 @@
 {
   "manifest_version": 3,
-  "name": "Test extension",
-  "description": "Extension",
+  "name": "ScanForLinks",
+  "description": "Extension for extracting links from web pages",
   "version": "0.1.0",
   "action": {
     "default_popup": "popup.html"
   },
   "permissions": [
     "activeTab",
-    "scripting"
+    "scripting",
+    "clipboardWrite"
   ]
 }
