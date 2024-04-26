@@ -14,12 +14,12 @@ public class Main {
     public static void main(String[] args) {
     }
 
-    public static String findDomainsAsString(String string, Charset cs) {
+    public static String findDomainsFromString(String string, Charset cs) {
         ByteArrayInputStream byteArray = new ByteArrayInputStream(string.getBytes(cs));
         return findDomains(byteArray, cs);
     }
 
-    public static String findDomainsAsFile(File file, Charset cs) throws IOException {
+    public static String findDomainsFromFile(File file, Charset cs) throws IOException {
         return findDomains(Files.newInputStream(file.toPath()), cs);
     }
 
