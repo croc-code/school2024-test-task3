@@ -26,7 +26,7 @@ public abstract class TextAnalyzer {
     }
 
     /**
-     * Метод {@code findAll} предоставляет доступ к последовательности символов,
+     * Метод {@code getText()} предоставляет доступ к последовательности символов,
      * которая подвергается анализу.
      * @return Последовательность символов
      */
@@ -40,7 +40,7 @@ public abstract class TextAnalyzer {
      * общему паттерну конкретной реализации.
      * @return Последовательность последовательностей символов
      */
-    public abstract Collection<CharSequence> findAll();
+    public abstract Collection<? extends CharSequence> findAll();
 
     /**
      * Метод {@code next} итерирует по подпоследовательностям символов, где каждая
