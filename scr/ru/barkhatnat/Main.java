@@ -20,7 +20,7 @@ public class Main {
         do {
             System.out.println("Enter file name with it's extension: ");
             fileName = scanner.next();
-            String path = "scr/ru/barkhatnat/" + fileName;
+            String path = "src/main/resources/" + fileName;
             File file = new File(path);
             try {
                 if (fileName.endsWith(".html")) {
