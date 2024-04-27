@@ -44,6 +44,7 @@ public class Main {
 
             domains.stream()
                     .map(domain -> domain.startsWith("www.") ? domain.substring("www.".length()) : domain)
+                    .map(String::toLowerCase)
                     .sorted()
                     .forEach(domainManager::addDomain);
             return domainManager.toString();
