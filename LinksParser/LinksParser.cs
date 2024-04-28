@@ -25,8 +25,7 @@ namespace LinksParserLib
                 foreach (var linkNode in listNodes)
                 {
                     string url = linkNode.GetAttributeValue("href", "");
-                    Uri uri;
-                    if (!Uri.TryCreate(url, UriKind.Absolute, out uri))
+                    if (!Uri.TryCreate(url, UriKind.Absolute, out Uri uri))
                     {
                         continue;
                     }
