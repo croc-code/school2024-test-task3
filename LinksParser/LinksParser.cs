@@ -1,18 +1,24 @@
 using HtmlAgilityPack;
-using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace LinksParserLib
 {
     public class LinksParser
     {
-        public async Task<string> ParseLinks(string htmlContent)
+        public async Task<string> ParseLinksAsync(string pathToDocument)
         {
+            if (!File.Exists(pathToDocument))
+            {
+                throw new FileNotFoundException("File not found", pathToDocument);
+            }
+
+            string htmlContent = await File.ReadAllTextAsync(pathToDocument);
+
             var htmlDocument = new HtmlDocument();
             htmlDocument.LoadHtml(htmlContent);
 
             var listNodes = htmlDocument.DocumentNode.SelectNodes("//a[@href]");
-            var listLinks = new List<string>();
-            var setDomains = new HashSet<string>();
+            var setDomains = new SelectedSites();
 
             if (listNodes != null)
             {
@@ -20,26 +26,32 @@ namespace LinksParserLib
                 {
                     string url = linkNode.GetAttributeValue("href", "");
                     Uri uri;
-
                     if (!Uri.TryCreate(url, UriKind.Absolute, out uri))
                     {
                         continue;
                     }
 
                     string domain = uri.Host;
-
                     if (string.IsNullOrEmpty(domain))
                     {
                         continue;
                     }
 
-                    if (!setDomains.Contains(domain))
-                    {
-                        setDomains.Add(domain);
-                    }
+                    domain = TryRemoveWww(domain);
+
+                    setDomains.Sites.Add(domain);
                 }
             }  
-            return await Task.Run(() => setDomains.Aggregate((x, y) => x + "\n" + y));
+            return JsonSerializer.Serialize(setDomains);
         } 
+        private string TryRemoveWww(string domain) 
+        {
+            if(domain.Contains("www.")) 
+            {
+                return domain.Replace("www.", "");
+            }
+            return domain;
+        }
     }
 }
+
