@@ -1,5 +1,3 @@
-import pytest
-import sys
 import json
 from src.url_parser import process_html
 
