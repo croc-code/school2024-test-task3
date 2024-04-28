@@ -1,0 +1,1605 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>������ ngx_http_ssl_module</title><style type="text/css">body { background: white; color: black; font-family: sans-serif; line-height: 1.4em; text-align: center; margin: 0; padding: 0; } #banner { background: black; color: #F2F2F2; line-height: 1.2em; padding: .3em 0; box-shadow: 0 5px 10px black; } #banner a { color: #00B140; } #main { text-align: left; margin: 0 auto; min-width: 32em; max-width: 64em; } #menu { float: right; width: 11em; padding: 0 .5em 1em .5em; border-left: 2px solid #DDD; } #content { margin-right: 13.5em; padding: 0 .2em 0 1.5em; } h1 { display: block; font-size: 3em; text-align: left; height: .7em; margin: 0; margin-bottom: .5em; } h1 img { width: 100%; } h2 { text-align: center; } p { text-align: justify; } table.news p { margin-top: 0; } table.news td { vertical-align: baseline; } table.news .date { text-align: right; padding-right: 0.5em; white-space: nowrap; } table.donors td { vertical-align: baseline; } table.donors li { text-align: left; } div.directive { background: #F2F2F2; line-height: 1em; margin: 1em 0 1em -1em; padding: .7em .7em .7em 1em; border-top: 2px solid #DDD; } div.directive th { padding-left: 0; padding-right: .5em; vertical-align: baseline; text-align: left; font-weight: normal; } div.directive td { vertical-align: baseline; } div.directive pre { padding: 0; margin: 0; } div.directive p { margin: .5em 0 0 .1em; font-size: .8em; } a.notrans { color: gray; text-decoration:none; } span.initial { font-size: 200%; float: left; padding-right: 10pt;} ul, ol { margin: .5em 0 1em 1em; padding: 0 .5em; } ol { list-style-position: inside; } li { text-align: justify; padding: .5em 0 0 1px; } .compact li { padding-top: 0; } dl { margin: .5em 0 1em 0; } dt { margin: .5em 0; } .compact dt { margin-bottom: .2em; } dd { margin-left: 1.5em; padding-left: 1px; text-align: justify; } td.list { background: #F2F2F2; } blockquote { margin: 1em 0 1em 1em; padding: .5em; } li blockquote, dd blockquote { margin: .7em 0; } blockquote.note { border: 1px dotted #999; line-height: 1.2em; text-align: justify; } blockquote.example { line-height: 1em; border-left: 1px solid #BBB; } blockquote.example pre { padding: 0; margin: 0; } sup { font-size: 50%; } .video { position: relative; padding-bottom: 56.25%; overflow: hidden; } .video iframe, .video object, .video embed { position: absolute; top:0; left:0; width:100%; height:100%; }</style><script>
+        window.addEventListener("load", function(e) {
+            fetch("../../../banner/banner.html")
+                .then((response) => response.text())
+                .then((resp) => {
+                    document.getElementById("banner").innerHTML = resp;
+                })
+                .catch((error) => {
+                    console.warn(error);
+                });
+        });
+    </script></head><body><div id="banner"></div><div id="main"><div id="menu"><h1><a href="/"><img src="/nginx.png" alt="nginx"></a></h1><div><a href="../../../en/docs/http/ngx_http_ssl_module.html">english</a><br>�������<br><br><a href="../../../">�������</a> [en]<br><a href="../../../ru/">�� nginx</a><br><a href="../../../ru/download.html">�������</a><br><a href="../../../en/security_advisories.html">������������</a> [en]<br><a href="../../../ru/docs/">������������</a><br><a href="../../../ru/docs/faq.html">faq</a><br><a href="../../../en/books.html">�����</a> [en]<br><a href="../../../ru/support.html">���������</a><br><br><a href="http://trac.nginx.org/nginx">trac</a><br><a href="http://twitter.com/nginxorg">twitter</a><br><a href="https://www.nginx.com/blog/">blog</a><br><br><a href="https://unit.nginx.org/">unit</a><br><a href="../../../ru/docs/njs/">njs</a><br></div></div><div id="content"><h2>������ ngx_http_ssl_module</h2><table width="100%"><tr><td align="left"><a href="#example">������ ������������</a><br><a href="#directives">���������</a><br>�����<a href="#ssl">ssl</a><br>�����<a href="#ssl_buffer_size">ssl_buffer_size</a><br>�����<a href="#ssl_certificate">ssl_certificate</a><br>�����<a href="#ssl_certificate_key">ssl_certificate_key</a><br>�����<a href="#ssl_ciphers">ssl_ciphers</a><br>�����<a href="#ssl_client_certificate">ssl_client_certificate</a><br>�����<a href="#ssl_conf_command">ssl_conf_command</a><br>�����<a href="#ssl_crl">ssl_crl</a><br>�����<a href="#ssl_dhparam">ssl_dhparam</a><br>�����<a href="#ssl_early_data">ssl_early_data</a><br>�����<a href="#ssl_ecdh_curve">ssl_ecdh_curve</a><br>�����<a href="#ssl_ocsp">ssl_ocsp</a><br>�����<a href="#ssl_ocsp_cache">ssl_ocsp_cache</a><br>�����<a href="#ssl_ocsp_responder">ssl_ocsp_responder</a><br>�����<a href="#ssl_password_file">ssl_password_file</a><br>�����<a href="#ssl_prefer_server_ciphers">ssl_prefer_server_ciphers</a><br>�����<a href="#ssl_protocols">ssl_protocols</a><br>�����<a href="#ssl_reject_handshake">ssl_reject_handshake</a><br>�����<a href="#ssl_session_cache">ssl_session_cache</a><br>�����<a href="#ssl_session_ticket_key">ssl_session_ticket_key</a><br>�����<a href="#ssl_session_tickets">ssl_session_tickets</a><br>�����<a href="#ssl_session_timeout">ssl_session_timeout</a><br>�����<a href="#ssl_stapling">ssl_stapling</a><br>�����<a href="#ssl_stapling_file">ssl_stapling_file</a><br>�����<a href="#ssl_stapling_responder">ssl_stapling_responder</a><br>�����<a href="#ssl_stapling_verify">ssl_stapling_verify</a><br>�����<a href="#ssl_trusted_certificate">ssl_trusted_certificate</a><br>�����<a href="#ssl_verify_client">ssl_verify_client</a><br>�����<a href="#ssl_verify_depth">ssl_verify_depth</a><br><a href="#errors">��������� ������</a><br><a href="#variables">���������� ����������</a><br></td></tr></table>
+
+<a name="summary"></a><p>
+������ <code>ngx_http_ssl_module</code> ������������ ������
+�� ��������� HTTPS.
+</p><p>
+�� ��������� ���� ������ �� ����������, ��� ������ ����������
+��������� � ������� ����������������� ���������
+<code>--with-http_ssl_module</code>.
+</p> <blockquote class="note">
+��� ������ � ������ ����� ������ ����� ����������
+<a href="http://www.openssl.org">OpenSSL</a>.
+<a href="ftp://www.openssl.org">OpenSSL</a>.
+<a href="https://openssl.org">OpenSSL</a>.
+
+</blockquote><p> 
+</p>
+
+
+<a name="example"></a><center><h4>������ ������������</h4></center><p>
+��� ���������� �������� ���������� �������������
+</p> <ul class="compact">
+
+<li>
+���������� �����
+<a href="../ngx_core_module.html#worker_processes">������� ���������</a>
+������ ����� �����������,
+</li>
+
+<li>
+���������
+<a href="ngx_http_core_module.html#keepalive_timeout">keep-alive</a>
+����������,
+</li>
+
+<li>
+�������� <a href="#ssl_session_cache_shared">�����������</a> ��� ������,
+</li>
+
+<li>
+��������� <a href="#ssl_session_cache_builtin">����������</a> ��� ������
+</li>
+
+<li>
+�, ��������, ��������� <a href="#ssl_session_timeout">����� �����</a> ������
+(�� ��������� 5 �����):
+</li>
+
+</ul><p> 
+
+</p> <blockquote class="example"><pre>
+<strong>worker_processes auto;</strong>
+
+http {
+
+    ...
+
+    server {
+        listen              443 ssl;
+        <strong>keepalive_timeout   70;</strong>
+
+        ssl_protocols       TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+        ssl_ciphers         AES128-SHA:AES256-SHA:RC4-SHA:DES-CBC3-SHA:RC4-MD5;
+        ssl_certificate     /usr/local/nginx/conf/cert.pem;
+        ssl_certificate_key /usr/local/nginx/conf/cert.key;
+        <strong>ssl_session_cache   shared:SSL:10m;</strong>
+        <strong>ssl_session_timeout 10m;</strong>
+
+        ...
+    }
+</pre></blockquote><p> 
+</p>
+
+
+<a name="directives"></a><center><h4>���������</h4></center><a name="ssl"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl</strong> <code>on</code> | <code>off</code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <pre>ssl off;</pre>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table></div><p>
+��� ��������� �������� � ������ 1.15.0
+� ���� ������� � ������ 1.25.1.
+������ �� �������
+������������ �������� <code>ssl</code>
+��������� <a href="ngx_http_core_module.html#listen">listen</a>.
+</p><a name="ssl_buffer_size"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_buffer_size</strong> <code><i>size</i></code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <pre>ssl_buffer_size 16k;</pre>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table><p>��� ��������� ��������� � ������ 1.5.9.
+            </p></div><p>
+����� ������ ������, ������������� ��� �������� ������.
+</p><p>
+�� ��������� ������ ������ ����� 16k, ��� ������������� �����������
+��������� �������� ��� �������� ������� �������.
+� ����� ����������� ������� ��������� ������ ������ (Time To First Byte)
+����� ���� ������� ������������ ������� ��������,
+��������:
+</p> <blockquote class="example"><pre>
+ssl_buffer_size 4k;
+</pre></blockquote><p> 
+</p><a name="ssl_certificate"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_certificate</strong> <code><i>����</i></code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            
+            �
+        
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table></div><p>
+��������� <code><i>����</i></code> � ������������ � ������� PEM
+��� ������� ������������ �������.
+���� ������ � �������� ������������ ����� ������� �������������,
+�� ��� ������ ���������� � ���� �� ����� � ��������� �������: �������
+�������� ����������, � ����� �������������.
+� ���� �� ����� ����� ���������� ��������� ���� � ������� PEM.
+</p><p>
+������� � ������ 1.11.0
+��� ��������� ����� ���� ������� ��������� ���
+��� �������� ������������ ������ �����, �������� RSA � ECDSA:
+</p> <blockquote class="example"><pre>
+server {
+    listen              443 ssl;
+    server_name         example.com;
+
+    ssl_certificate     example.com.rsa.crt;
+    ssl_certificate_key example.com.rsa.key;
+
+    ssl_certificate     example.com.ecdsa.crt;
+    ssl_certificate_key example.com.ecdsa.key;
+
+    ...
+}
+</pre></blockquote><p> 
+</p> <blockquote class="note">
+����������� �������� ���������
+<a href="configuring_https_servers.html#chains">�������
+������������</a>
+��� ������ ������������ ���� ������ � OpenSSL 1.0.2 � ����.
+��� ����� ������ ������ ������� ��������� ������ ���� ������� ������������.
+</blockquote><p> 
+</p><p>
+������� � ������ 1.15.9 � ����� ����� ����� ������������ ����������
+��� ������������� OpenSSL 1.0.2 � ����:
+</p> <blockquote class="example"><pre>
+ssl_certificate     $ssl_server_name.crt;
+ssl_certificate_key $ssl_server_name.key;
+</pre></blockquote><p> 
+������ ����� ���������, ��� ��� ������������� ����������
+���������� ����������� ��� ������ �������� SSL handshake,
+��� ����� ������������ ������ �� ������������������.
+</p><a name="ssl_certificate_data"></a><p>
+������ <code><i>�����</i></code> ����� ������� ��������
+<code>data</code>:<code><i>$����������</i></code> (1.15.10),
+��� ������� ���������� ����������� �� ����������
+��� ������������� ������������� ������.
+��� ���� ������� ���������, ��� ������������ �������������
+��������� ���������� ����� ���� �����������,
+�������� ������ ���������� ����� ����� ������� �
+<a href="../ngx_core_module.html#error_log">��� ������</a>.
+</p><p>
+����� ����� � ����, ��� ��-�� ����������� ��������� HTTPS
+��� ������������ ������������� ����������� ������� ������ ������� ��
+<a href="configuring_https_servers.html#name_based_https_servers">������
+IP-�������</a>.
+</p><a name="ssl_certificate_key"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_certificate_key</strong> <code><i>����</i></code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            
+            �
+        
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table></div><p>
+��������� <code><i>����</i></code> � ��������� ������ � ������� PEM
+��� ������� ������������ �������.
+</p><p>
+������ <code><i>�����</i></code> ����� ������� ��������
+<code>engine</code>:<code><i>���</i></code>:<code><i>id</i></code> (1.7.9),
+������� ��������� ���� � ��������� <code><i>id</i></code>
+�� OpenSSL engine � �������� <code><i>������</i></code>.
+</p><a name="ssl_certificate_key_data"></a><p>
+������ <code><i>�����</i></code> ����� ������� ��������
+<code>data</code>:<code><i>$����������</i></code> (1.15.10),
+��� ������� ��������� ���� ����������� �� ����������
+��� ������������� ������������� ������.
+��� ���� ������� ���������, ��� ������������ �������������
+��������� ���������� ����� ���� �����������,
+�������� ������ ���������� ����� ����� ������� �
+<a href="../ngx_core_module.html#error_log">��� ������</a>.
+</p><p>
+������� � ������ 1.15.9 � ����� ����� ����� ������������ ����������
+��� ������������� OpenSSL 1.0.2 � ����.
+</p><a name="ssl_ciphers"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_ciphers</strong> <code><i>�����</i></code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <pre>ssl_ciphers HIGH:!aNULL:!MD5;</pre>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table></div><p>
+��������� ����������� �����.
+����� �������� � �������, �������������� �����������
+OpenSSL, ��������:
+</p> <blockquote class="example"><pre>
+ssl_ciphers ALL:!aNULL:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;
+</pre></blockquote><p> 
+</p><p>
+������ ������ ����� ���������� � ������� �������
+�<code>openssl ciphers</code>�.
+</p><p>
+</p> <blockquote class="note">
+� ���������� ������� nginx �� ��������� ��������������
+<a href="configuring_https_servers.html#compatibility">������</a>
+�����.
+</blockquote><p> 
+</p><a name="ssl_client_certificate"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_client_certificate</strong> <code><i>����</i></code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            
+            �
+        
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table></div><p>
+��������� <code><i>����</i></code> � ����������� ������������� CA � �������
+PEM, ������� ������������ ���
+<a href="#ssl_verify_client">��������</a> ���������� ������������ �
+������� OCSP, ���� ������� <a href="#ssl_stapling">ssl_stapling</a>.
+</p><p>
+������ ������������ ����� ������������ ��������.
+���� ��� ������������, ����� ��������������� ����������
+<a href="#ssl_trusted_certificate">ssl_trusted_certificate</a>.
+</p><a name="ssl_conf_command"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_conf_command</strong> <code><i>���</i></code> <code><i>��������</i></code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            
+            �
+        
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table><p>��� ��������� ��������� � ������ 1.19.4.
+            </p></div><p>
+����� ������������ ����������������
+<a href="https://www.openssl.org/docs/man1.1.1/man3/SSL_CONF_cmd.html">�������</a>
+OpenSSL.
+</p> <blockquote class="note">
+��������� �������������� ��� ������������� OpenSSL 1.0.2 � ����.
+</blockquote><p> 
+</p><p>
+�� ����� ������ ����� ���� �������
+��������� �������� <code>ssl_conf_command</code>:
+</p> <blockquote class="example"><pre>
+ssl_conf_command Options PrioritizeChaCha;
+ssl_conf_command Ciphersuites TLS_CHACHA20_POLY1305_SHA256;
+</pre></blockquote><p> 
+��������� ����������� � ����������� ������ ������������ ��� �������, ���
+�� ������ ������ �� ������� ���� ��������� <code>ssl_conf_command</code>.
+</p><p>
+</p> <blockquote class="note">
+������� ���������, ��� ��������� �������� OpenSSL ��������
+����� �������� � ������������ ���������.
+</blockquote><p> 
+</p><a name="ssl_crl"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_crl</strong> <code><i>����</i></code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            
+            �
+        
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table><p>��� ��������� ��������� � ������ 0.8.7.
+            </p></div><p>
+��������� <code><i>����</i></code> � ����������� ������������� (CRL)
+� ������� PEM, ������������� ���
+<a href="#ssl_verify_client">��������</a> ���������� ������������.
+</p><a name="ssl_dhparam"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_dhparam</strong> <code><i>����</i></code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            
+            �
+        
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table><p>��� ��������� ��������� � ������ 0.7.2.
+            </p></div><p>
+��������� <code><i>����</i></code> � ����������� ��� DHE-������.
+</p><p>
+�� ��������� ��������� �� ������,
+� �������������� DHE-����� �� ����� ��������������.
+</p> <blockquote class="note">
+�� ������ 1.11.0 �� ��������� �������������� ���������� ���������.
+</blockquote><p> 
+</p><a name="ssl_early_data"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_early_data</strong> <code>on</code> | <code>off</code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <pre>ssl_early_data off;</pre>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table><p>��� ��������� ��������� � ������ 1.15.3.
+            </p></div><p>
+��������� ��� ��������� TLS 1.3
+<a href="https://datatracker.ietf.org/doc/html/rfc8446#section-2.3">early data</a>.
+</p> <blockquote class="note">
+�������, ������������ ������ early data, ����� ���� ����������
+<a href="https://datatracker.ietf.org/doc/html/rfc8470">������ ���������� ���������������</a> (replay).
+��� ������ �� �������� ���� �� ������ ����������
+���������� ������������
+���������� <a href="#var_ssl_early_data">$ssl_early_data</a>.
+</blockquote><p> 
+
+</p> <blockquote class="example"><pre>
+proxy_set_header Early-Data $ssl_early_data;
+</pre></blockquote><p> 
+
+</p> <blockquote class="note">
+��������� �������������� ��� ������������� OpenSSL 1.1.1 � ���� (1.15.4) ���
+<a href="https://boringssl.googlesource.com/boringssl/">BoringSSL</a>.
+</blockquote><p> 
+</p><a name="ssl_ecdh_curve"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_ecdh_curve</strong> <code><i>������</i></code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <pre>ssl_ecdh_curve auto;</pre>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table>
+                        <p>
+                    ��� ��������� ��������� � ������� 1.1.0 � 1.0.6.
+                    
+                        </p>
+                    </div><p>
+����� ������ ��� ECDHE-������.
+</p><p>
+��� ������������� OpenSSL 1.0.2 � ����
+����� ��������� ��������� ������ (1.11.0), ��������:
+</p> <blockquote class="example"><pre>
+ssl_ecdh_curve prime256v1:secp384r1;
+</pre></blockquote><p> 
+</p><p>
+����������� �������� <code>auto</code> (1.11.0) �������������
+����������� � ���������� OpenSSL ������ ������ ��� OpenSSL 1.0.2 � ����,
+��� <code>prime256v1</code> ��� ����� ������ ������.
+</p><p>
+</p> <blockquote class="note">
+�� ������ 1.11.0
+�� ��������� �������������� ������ <code>prime256v1</code>.
+</blockquote><p> 
+</p><p>
+</p> <blockquote class="note">
+��� ������������� OpenSSL 1.0.2 � ����
+��������� ����� ������ ������, �������������� ��������.
+������� ��� ������ ECDSA-������������
+�����, ����� ������ ������� ������, ������������ � ������������.
+</blockquote><p> 
+</p><a name="ssl_ocsp"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_ocsp</strong> <code>on</code> |
+        <code>off</code> |
+        <code>leaf</code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <pre>ssl_ocsp off;</pre>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table><p>��� ��������� ��������� � ������ 1.19.0.
+            </p></div><p>
+�������� �������� OCSP ��� ������� ���������� ������������.
+�������� <code>leaf</code>
+�������� �������� ������ ����������� �����������.
+</p><p>
+��� ������ �������� OCSP
+���������� ������������� ���������� �������� ���������
+<a href="#ssl_verify_client">ssl_verify_client</a> �
+<code>on</code> ��� <code>optional</code>.
+</p><p>
+��� �������������� ����� ����� OCSP responder�� � ����� ����������
+������������� ������ ���������
+<a href="ngx_http_core_module.html#resolver">resolver</a>.
+</p><p>
+������:
+</p> <blockquote class="example"><pre>
+ssl_verify_client on;
+ssl_ocsp          on;
+resolver          192.0.2.1;
+</pre></blockquote><p> 
+</p><a name="ssl_ocsp_cache"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_ocsp_cache</strong> 
+    <code>off</code> |
+    [<code>shared</code>:<code><i>���</i></code>:<code><i>������</i></code>];</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <pre>ssl_ocsp_cache off;</pre>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table><p>��� ��������� ��������� � ������ 1.19.0.
+            </p></div><p>
+����� <code>���</code> � <code>������</code> ����,
+������� ������ ������ ���������� ������������ ��� �������� OCSP-�������.
+��� ����������� ����� ����� �������� ����������.
+��� � ���������� ��������� ����� �������������� � ����������
+����������� ��������.
+</p><p>
+�������� <code>off</code> ��������� ������������� ����.
+</p><a name="ssl_ocsp_responder"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_ocsp_responder</strong> <code><i>url</i></code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            
+            �
+        
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table><p>��� ��������� ��������� � ������ 1.19.0.
+            </p></div><p>
+�������������� URL OCSP responder��, ��������� � ���������� �����������
+�<a href="https://datatracker.ietf.org/doc/html/rfc5280#section-4.2.2.1">Authority
+Information Access</a>�
+��� <a href="#ssl_ocsp">��������</a> ���������� ������������.
+</p><p>
+�������������� ������ �<code>http://</code>� OCSP responder��:
+</p> <blockquote class="example"><pre>
+ssl_ocsp_responder http://ocsp.example.com/;
+</pre></blockquote><p> 
+</p><a name="ssl_password_file"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_password_file</strong> <code><i>����</i></code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            
+            �
+        
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table><p>��� ��������� ��������� � ������ 1.7.3.
+            </p></div><p>
+����� <code><i>����</i></code> � �������� ��
+<a href="#ssl_certificate_key">��������� ������</a>,
+��� ������ ������ ������ �� ��������� ������.
+������ ����������� �� ������� � ������ �������� �����.
+</p><p>
+������:
+</p> <blockquote class="example"><pre>
+http {
+    ssl_password_file /etc/keys/global.pass;
+    ...
+
+    server {
+        server_name www1.example.com;
+        ssl_certificate_key /etc/keys/first.key;
+    }
+
+    server {
+        server_name www2.example.com;
+
+        # ������ ����� ����� ������� ����������� �����
+        ssl_password_file /etc/keys/fifo;
+        ssl_certificate_key /etc/keys/second.key;
+    }
+}
+</pre></blockquote><p> 
+</p><a name="ssl_prefer_server_ciphers"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_prefer_server_ciphers</strong> <code>on</code> | <code>off</code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <pre>ssl_prefer_server_ciphers off;</pre>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table></div><p>
+���������, ����� ��� ������������� ���������� SSLv3 � TLS
+��������� ����� ���� ����� �����������, ��� ����������.
+</p><a name="ssl_protocols"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_protocols</strong> 
+    [<code>SSLv2</code>]
+    [<code>SSLv3</code>]
+    [<code>TLSv1</code>]
+    [<code>TLSv1.1</code>]
+    [<code>TLSv1.2</code>]
+    [<code>TLSv1.3</code>];</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <pre>ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;</pre>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table></div><p>
+��������� ��������� ���������.
+</p><p>
+���� ��������� �������
+�� ������ <a href="ngx_http_core_module.html#server">server</a>,
+�� ����� �������������� �������� �� ������� �� ���������.
+��������� ��. � �������
+�<a href="server_names.html#virtual_server_selection">�����
+������������ �������</a>�.
+</p><p>
+</p> <blockquote class="note">
+��������� <code>TLSv1.1</code> � <code>TLSv1.2</code>
+(1.1.13, 1.0.12) �������� ������ ��� ������������� OpenSSL 1.0.1 � ����.
+</blockquote><p> 
+</p> <blockquote class="note">
+�������� <code>TLSv1.3</code> (1.13.0) �������� ������
+��� ������������� OpenSSL 1.1.1 � ����.
+</blockquote><p> 
+</p> <blockquote class="note">
+�������� <code>TLSv1.3</code> ������������ �� ���������
+������� � 1.23.4.
+</blockquote><p> 
+</p><a name="ssl_reject_handshake"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_reject_handshake</strong> <code>on</code> | <code>off</code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <pre>ssl_reject_handshake off;</pre>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table><p>��� ��������� ��������� � ������ 1.19.4.
+            </p></div><p>
+���� ���������, �� �������� SSL handshake �
+����� <a href="ngx_http_core_module.html#server">server</a> ����� ���������.
+</p><p>
+�������� � ���� ������������ ����������� ��� �������� SSL handshake �
+������ �������, �������� �� <code>example.com</code>:
+</p> <blockquote class="example"><pre>
+server {
+    listen               443 ssl default_server;
+    ssl_reject_handshake on;
+}
+
+server {
+    listen              443 ssl;
+    server_name         example.com;
+    ssl_certificate     example.com.crt;
+    ssl_certificate_key example.com.key;
+}
+</pre></blockquote><p> 
+</p><a name="ssl_session_cache"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_session_cache</strong> 
+    <code>off</code> |
+    <code>none</code> |
+    [<code>builtin</code>[:<code><i>������</i></code>]]
+    [<code>shared</code>:<code><i>��������</i></code>:<code><i>������</i></code>];</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <pre>ssl_session_cache none;</pre>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table></div><p>
+����� ��� � ������� ����� ��� �������� ���������� ������.
+��� ���� ����� ���� ���������:
+</p> <dl class="compact">
+
+<dt><code>off</code></dt>
+<dd>
+������ ���������� ������������� ���� ������:
+nginx ���� �������� �������, ��� ������ �� ����� �������������� ��������.
+</dd>
+
+<dt><code>none</code></dt>
+<dd>
+������ ���������� ������������� ���� ������:
+nginx �������� �������, ��� ������ ����� �������������� ��������, ��
+�� ����� ���� �� ������ ��������� ������ � ����.
+</dd>
+
+<dt id="ssl_session_cache_builtin"><code>builtin</code></dt>
+<dd>
+���������� � OpenSSL ���, ������������ � ������ ������ ������ �������� ��������.
+������ ���� ������� � �������.
+���� ������ �� �����, �� �� ����� 20480 �������.
+������������� ����������� ���� ����� ����� � ������������ ������.
+</dd>
+
+<dt id="ssl_session_cache_shared"><code>shared</code></dt>
+<dd>
+���, ����������� ����� ����� �������� ����������.
+������ ���� ������� � ������, � 1 �������� ����� �����������
+����� 4000 ������.
+� ������� ������������ ���� ������ ���� ������������ ��������.
+��� � ���������� ��������� ����� �������������� � ����������
+����������� ��������.
+����� �� ������������ ��� ��������������� ��������, �������� �
+�������������� ���������� ������ TLS session tickets (1.23.2),
+���� ��� �� ������� ����
+� ������� ��������� <a href="#ssl_session_ticket_key">ssl_session_ticket_key</a>.
+</dd>
+
+</dl><p> 
+</p><p>
+����� ������������ ������������ ��� ���� ����, ��������:
+</p> <blockquote class="example"><pre>
+ssl_session_cache builtin:1000 shared:SSL:10m;
+</pre></blockquote><p> 
+������ ������������� ������ ������������ ���� ��� ����������� ������
+���� ����� �����������.
+</p><a name="ssl_session_ticket_key"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_session_ticket_key</strong> <code><i>����</i></code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            
+            �
+        
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table><p>��� ��������� ��������� � ������ 1.5.7.
+            </p></div><p>
+����� <code><i>����</i></code> � ��������� ������, ����������� ��� ���������� �
+������������� TLS session tickets.
+��������� ����������, ���� ���� � ��� �� ���� ����� ������������
+�� ���������� ��������.
+�� ��������� ������������ �������� ��������������� ����.
+</p><p>
+���� ������� ��������� ������, �� ������ ������ ����
+������������ ��� ���������� TLS session tickets.
+��� ��������� ��������� ������� ������, ��������:
+</p> <blockquote class="example"><pre>
+ssl_session_ticket_key current.key;
+ssl_session_ticket_key previous.key;
+</pre></blockquote><p> 
+</p><p>
+<code><i>����</i></code> ������ ��������� 80 ��� 48 ���� ��������� ������
+� ����� ���� ������ ��������� ��������:
+</p> <blockquote class="example"><pre>
+openssl rand 80 &gt; ticket.key
+</pre></blockquote><p> 
+� ����������� �� ������� ����� ��� ���������� ����� �������������� ����
+AES256 (��� 80-������� ������, 1.11.8), ���� AES128 (��� 48-������� ������).
+</p><a name="ssl_session_tickets"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_session_tickets</strong> <code>on</code> | <code>off</code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <pre>ssl_session_tickets on;</pre>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table><p>��� ��������� ��������� � ������ 1.5.9.
+            </p></div><p>
+��������� ��� ��������� ������������� ������ ��� ������
+<a href="https://datatracker.ietf.org/doc/html/rfc5077">TLS session tickets</a>.
+</p><a name="ssl_session_timeout"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_session_timeout</strong> <code><i>�����</i></code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <pre>ssl_session_timeout 5m;</pre>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table></div><p>
+����� �����, � ������� �������� ������ ����� ��������
+������������ ��������� ������.
+</p><a name="ssl_stapling"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_stapling</strong> <code>on</code> | <code>off</code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <pre>ssl_stapling off;</pre>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table><p>��� ��������� ��������� � ������ 1.3.7.
+            </p></div><p>
+��������� ��� ���������
+<a href="https://datatracker.ietf.org/doc/html/rfc6066#section-8">������������
+OCSP-�������</a> ��������.
+������:
+</p> <blockquote class="example"><pre>
+ssl_stapling on;
+resolver 192.0.2.1;
+</pre></blockquote><p> 
+</p><p>
+��� ������ OCSP stapling�� ������ ���� �������� ���������� ��������
+����������� �������.
+���� � �������� ���������� <a href="#ssl_certificate">ssl_certificate</a>
+����� �� ���������� ������������� ������������,
+�� ���������� �������� ����������� ������� ������� ��������� � ����,
+�������� ���������� <a href="#ssl_trusted_certificate">ssl_trusted_certificate</a>.
+</p><p>
+��� �������������� ����� ����� OCSP responder�� � ����� ����������
+������������� ������ ���������
+<a href="ngx_http_core_module.html#resolver">resolver</a>.
+</p><a name="ssl_stapling_file"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_stapling_file</strong> <code><i>����</i></code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            
+            �
+        
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table><p>��� ��������� ��������� � ������ 1.3.7.
+            </p></div><p>
+���� ������, �� ������ ������ OCSP responder��,
+���������� � ����������� �������,
+����� ������ �� ���������� <code><i>�����</i></code>.
+</p><p>
+����� ������ ���� � ������� DER � ����� ���� ������������ ��������
+�<code>openssl ocsp</code>�.
+</p><a name="ssl_stapling_responder"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_stapling_responder</strong> <code><i>url</i></code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            
+            �
+        
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table><p>��� ��������� ��������� � ������ 1.3.7.
+            </p></div><p>
+�������������� URL OCSP responder��, ��������� � ���������� �����������
+�<a href="https://datatracker.ietf.org/doc/html/rfc5280#section-4.2.2.1">Authority
+Information Access</a>�.
+</p><p>
+�������������� ������ �<code>http://</code>� OCSP responder��:
+</p> <blockquote class="example"><pre>
+ssl_stapling_responder http://ocsp.example.com/;
+</pre></blockquote><p> 
+</p><a name="ssl_stapling_verify"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_stapling_verify</strong> <code>on</code> | <code>off</code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <pre>ssl_stapling_verify off;</pre>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table><p>��� ��������� ��������� � ������ 1.3.7.
+            </p></div><p>
+��������� ��� ��������� �������� �������� ������� OCSP.
+</p><p>
+��� ����������������� �������� ���������� �������� ����������� �������,
+�������� ���������� � ��� ������������� ����������� ������ ���� �������
+��� ���������� � ������� ���������
+<a href="#ssl_trusted_certificate">ssl_trusted_certificate</a>.
+</p><a name="ssl_trusted_certificate"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_trusted_certificate</strong> <code><i>����</i></code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            
+            �
+        
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table><p>��� ��������� ��������� � ������ 1.3.7.
+            </p></div><p>
+����� <code><i>����</i></code> � ����������� ������������� CA � ������� PEM,
+������� ������������ ��� <a href="#ssl_verify_client">��������</a>
+���������� ������������ � ������� OCSP,
+���� ������� <a href="#ssl_stapling">ssl_stapling</a>.
+</p><p>
+� ������� �� <a href="#ssl_client_certificate">ssl_client_certificate</a>, ������ ���� ������������
+�� ����� ������������ ��������.
+</p><a name="ssl_verify_client"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_verify_client</strong> 
+    <code>on</code> | <code>off</code> |
+    <code>optional</code> | <code>optional_no_ca</code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <pre>ssl_verify_client off;</pre>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table></div><p>
+��������� �������� ���������� ������������.
+��������� �������� �������� ����� ����������
+<a href="#var_ssl_client_verify">$ssl_client_verify</a>.
+</p><p>
+�������� <code>optional</code> (0.8.7+) ����������� ����������
+����������, � ���� ���������� ��� ������������, ��������� ���.
+</p><p>
+�������� <code>optional_no_ca</code> (1.3.8, 1.2.5)
+����������� ����������
+�������, �� �� �������, ����� �� ��� �������� ���������� ������������ CA.
+��� ������������� ��� �������, ����� ����������� �������� �����������
+�������������� ������� �� ��������� � nginx�� ��������.
+���������� ����������� �������� ����� ����������
+<a href="#var_ssl_client_cert">$ssl_client_cert</a>.
+</p><a name="ssl_verify_depth"></a><div class="directive"><table cellspacing="0">
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <code><strong>ssl_verify_depth</strong> <code><i>�����</i></code>;</code><br>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ���������:
+                </th>
+                <td>
+            <pre>ssl_verify_depth 1;</pre>
+                </td>
+                </tr>
+            
+                <tr>
+                <th>
+            ��������:
+                </th>
+                <td>
+            <code>http</code>, <code>server</code><br>
+                </td>
+                </tr>
+            </table></div><p>
+������������� ������� �������� � ������� ���������� ������������.
+</p>
+
+
+<a name="errors"></a><center><h4>��������� ������</h4></center><p>
+������ <code>ngx_http_ssl_module</code> ������������ ���������
+������������� ����� ������, ������� ����� ������������ ���
+��������������� � ������� ���������
+<a href="ngx_http_core_module.html#error_page">error_page</a>:
+</p> <dl class="compact">
+
+<dt>495</dt>
+<dd>
+��� �������� ����������� ����������� ��������� ������;
+</dd>
+
+<dt>496</dt>
+<dd>
+������ �� ����������� ��������� ����������;
+</dd>
+
+<dt>497</dt>
+<dd>
+������� ������ ��� ������ �� ���� HTTPS.
+</dd>
+
+</dl><p> 
+</p><p>
+��������������� �������� ����� ����, ��� ������ ��������� ��������
+� �������� ����� ����������, ��� <code>$request_uri</code>,
+<code>$uri</code>, <code>$args</code> � ������ ����������.
+</p>
+
+
+<a name="variables"></a><center><h4>���������� ����������</h4></center><p>
+������ <code>ngx_http_ssl_module</code> ������������
+���������� ����������:
+</p> <dl class="compact">
+
+<dt id="var_ssl_alpn_protocol"><code>$ssl_alpn_protocol</code></dt>
+<dd>
+���������� ��������, ��������� ��� ������ ALPN �� ����� �������� SSL handshake,
+���� ������ ������ (1.21.4);
+</dd>
+
+<dt id="var_ssl_cipher"><code>$ssl_cipher</code></dt>
+<dd>
+���������� �������� ������������� ����� ��� �������������� SSL-����������;
+</dd>
+
+<dt id="var_ssl_ciphers"><code>$ssl_ciphers</code></dt>
+<dd>
+���������� ������ ������, �������������� �������� (1.11.7).
+��������� ����� ������� �� �����, ����������� ������� � ����������������� ����,
+��������:
+<blockquote class="example"><pre>
+AES128-SHA:AES256-SHA:0x00ff
+</pre></blockquote>
+<blockquote class="note">
+���������� ��������� �������������� ��� ������������� OpenSSL ������ 1.0.2
+� ����.
+��� ������������� ����� ������ ������ ���������� ��������
+������ ��� ����� ������ � ����� ��������� ������ ��������� �����.
+</blockquote>
+</dd>
+
+<dt id="var_ssl_client_escaped_cert"><code>$ssl_client_escaped_cert</code></dt>
+<dd>
+���������� ���������� ���������� � ������� PEM
+(����������� � ������� urlencode) ��� �������������� SSL-���������� (1.13.5);
+</dd>
+
+<dt id="var_ssl_client_cert"><code>$ssl_client_cert</code></dt>
+<dd>
+���������� ���������� ����������
+��� �������������� SSL-���������� � ������� PEM
+����� ������ ������� ��������, ����� ������, ����������� ������ ���������;
+������������� ��� ������������� � ���������
+<a href="ngx_http_proxy_module.html#proxy_set_header">proxy_set_header</a>;
+<blockquote class="note">
+���������� ��������, ������ �� ������� ������������
+���������� <code>$ssl_client_escaped_cert</code>.
+</blockquote>
+</dd>
+
+<dt id="var_ssl_client_fingerprint"><code>$ssl_client_fingerprint</code></dt>
+<dd>
+���������� SHA1-��������� ����������� �����������
+��� �������������� SSL-���������� (1.7.1);
+</dd>
+
+<dt id="var_ssl_client_i_dn"><code>$ssl_client_i_dn</code></dt>
+<dd>
+���������� ������ �issuer�DN� ����������� �����������
+��� �������������� SSL-���������� ��������
+<a href="https://datatracker.ietf.org/doc/html/rfc2253">RFC 2253</a> (1.11.6);
+</dd>
+
+<dt id="var_ssl_client_i_dn_legacy"><code>$ssl_client_i_dn_legacy</code></dt>
+<dd>
+���������� ������ �issuer�DN� ����������� �����������
+��� �������������� SSL-����������;
+<blockquote class="note">
+�� ������ 1.11.6 ���������� ���������� <code>$ssl_client_s_dn</code>.
+</blockquote>
+</dd>
+
+<dt id="var_ssl_client_raw_cert"><code>$ssl_client_raw_cert</code>
+</dt>
+<dd>
+���������� ���������� ����������
+��� �������������� SSL-���������� � ������� PEM;
+</dd>
+
+<dt id="var_ssl_client_s_dn"><code>$ssl_client_s_dn</code></dt>
+<dd>
+���������� ������ �subject�DN� ����������� �����������
+��� �������������� SSL-���������� ��������
+<a href="https://datatracker.ietf.org/doc/html/rfc2253">RFC 2253</a> (1.11.6);
+</dd>
+
+<dt id="var_ssl_client_s_dn_legacy"><code>$ssl_client_s_dn_legacy</code></dt>
+<dd>
+���������� ������ �subject�DN� ����������� �����������
+��� �������������� SSL-����������;
+<blockquote class="note">
+�� ������ 1.11.6 ���������� ���������� <code>$ssl_client_s_dn</code>.
+</blockquote>
+</dd>
+
+<dt id="var_ssl_client_serial"><code>$ssl_client_serial</code></dt>
+<dd>
+���������� �������� ����� ����������� �����������
+��� �������������� SSL-����������;
+</dd>
+
+<dt id="var_ssl_client_v_end"><code>$ssl_client_v_end</code></dt>
+<dd>
+���������� ���� ��������� ����� �������� ����������� ����������� (1.11.7);
+</dd>
+
+<dt id="var_ssl_client_v_remain"><code>$ssl_client_v_remain</code></dt>
+<dd>
+���������� ����� ����,
+���������� �� ��������� ����� �������� ����������� ����������� (1.11.7);
+</dd>
+
+<dt id="var_ssl_client_v_start"><code>$ssl_client_v_start</code></dt>
+<dd>
+���������� ���� ������ ����� �������� ����������� ����������� (1.11.7);
+</dd>
+
+<dt id="var_ssl_client_verify"><code>$ssl_client_verify</code></dt>
+<dd>
+���������� ��������� �������� ����������� �����������:
+�<code>SUCCESS</code>�, �<code>FAILED:</code><code><i>reason</i></code>�
+�, ���� ���������� �� ��� ������������, �<code>NONE</code>�;
+<blockquote class="note">
+�� ������ 1.11.7 ��������� �<code>FAILED</code>�
+�� �������� ������ <code><i>reason</i></code>.
+</blockquote>
+</dd>
+
+<dt id="var_ssl_curve"><code>$ssl_curve</code></dt>
+<dd>
+���������� ������������� ������, �������������� ���
+������ ������� �� ����� �������� SSL handshake (1.21.5).
+��������� ������ ������� �� �����, ����������� ������� � ����������������� ����,
+��������:
+<blockquote class="example"><pre>
+prime256v1
+</pre></blockquote>
+<blockquote class="note">
+���������� �������������� ��� ������������� OpenSSL ������ 3.0 � ����.
+��� ������������� ����� ������ ������ ��������� ���������� ����� ������ ������.
+</blockquote>
+</dd>
+
+<dt id="var_ssl_curves"><code>$ssl_curves</code></dt>
+<dd>
+���������� ������ ������, �������������� �������� (1.11.7).
+��������� ������ ������� �� �����, ����������� ������� � ����������������� ����,
+��������:
+<blockquote class="example"><pre>
+0x001d:prime256v1:secp521r1:secp384r1
+</pre></blockquote>
+<blockquote class="note">
+���������� �������������� ��� ������������� OpenSSL ������ 1.0.2 � ����.
+��� ������������� ����� ������ ������ ��������� ���������� ����� ������ ������.
+</blockquote>
+<blockquote class="note">
+���������� �������� ������ ��� ����� ������.
+</blockquote>
+</dd>
+
+<dt id="var_ssl_early_data"><code>$ssl_early_data</code></dt>
+<dd>
+���������� �<code>1</code>�, ����
+������������ TLS 1.3 <a href="#ssl_early_data">early data</a>
+� �������� handshake �� ���������, ����� �� (1.15.3).
+</dd>
+
+<dt id="var_ssl_protocol"><code>$ssl_protocol</code></dt>
+<dd>
+���������� �������� �������������� SSL-����������;
+</dd>
+
+<dt id="var_ssl_server_name"><code>$ssl_server_name</code></dt>
+<dd>
+���������� ��� �������, ����������� �����
+<a href="http://en.wikipedia.org/wiki/Server_Name_Indication">SNI</a>
+(1.7.0);
+</dd>
+
+<dt id="var_ssl_session_id"><code>$ssl_session_id</code></dt>
+<dd>
+���������� ������������� ������ �������������� SSL-����������;
+</dd>
+
+<dt id="var_ssl_session_reused"><code>$ssl_session_reused</code></dt>
+<dd>
+���������� �<code>r</code>�, ���� ������ ���� ������������ ��������,
+����� �<code>.</code>� (1.5.11).
+</dd>
+
+</dl><p> 
+</p>
+
+</div></div></body></html>
