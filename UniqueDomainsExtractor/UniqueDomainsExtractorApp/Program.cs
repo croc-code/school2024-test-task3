@@ -10,7 +10,7 @@ try
 {
 	var doc = HtmlDocumentLoader.Load(args[0]);
 	var uniqueDomains = UniqueDomainsExtractor.ExtractToArray(doc);
-	var jsonUniqueDomains = DomainsJsonConverter.ToString(uniqueDomains);
+	var jsonUniqueDomains = DomainsJsonConverter.ConvertToJsonString(uniqueDomains);
 	Console.WriteLine(jsonUniqueDomains);
 }
 catch (HtmlDocumentLoaderException e)

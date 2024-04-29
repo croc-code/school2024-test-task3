@@ -4,7 +4,7 @@ namespace UniqueDomainsExtractorApp
 {
 	public static class DomainsJsonConverter
 	{
-		public static string ToString(string[] domains)
+		public static string ConvertToJsonString(string[] domains)
 		{
 			var jsonObject = new
 			{
