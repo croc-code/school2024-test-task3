@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "UniqueDomainsExtractorApp": {
+      "commandName": "Project",
+      "commandLineArgs": "\"C:\\Users\\denis\\OneDrive\\Рабочий стол\\page.html\""
+    }
+  }
+}
