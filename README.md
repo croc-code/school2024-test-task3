@@ -34,7 +34,7 @@
 
 ![изображение](https://github.com/slattchrome/school2024-test-task3/assets/112937058/61c808c5-edca-4207-aaf7-80ad9ac8d2bc)
 
-Загружию html файл в объект "doc" с помощью Jsoup, который позволит парсить html.
+Загружаю html файл в объект "doc" с помощью Jsoup, который позволит парсить html.
 
 ![изображение](https://github.com/slattchrome/school2024-test-task3/assets/112937058/c7e3180f-3283-4be4-a6d0-cfec28e20ca7)
 
