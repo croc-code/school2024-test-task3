@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "ScanForLinks",
+  "description": "Extension for extracting links from web pages",
+  "version": "0.1.0",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "16": "imgs/icon16.png",
+    "48": "imgs/icon48.png",
+    "128": "imgs/icon128.png"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "clipboardWrite"
+  ]
+}
